@@ -14,7 +14,7 @@ That's shorthand for `brew tap kupecloud/tap && brew install kupe`. Works on mac
 
 | Cask | Description | Upstream |
 |------|-------------|----------|
-| `kupe` | Official Kupe Cloud CLI | [kupecloud/kupe-cli](https://github.com/kupecloud/kupe-cli) |
+| `kupe` | Official CLI for Kupe Cloud | [kupecloud/kupe-cli](https://github.com/kupecloud/kupe-cli) |
 
 This tap publishes [Homebrew Casks](https://docs.brew.sh/Cask-Cookbook), not formulas. Casks have supported Linux Homebrew since 2024 (via `on_linux` blocks), are the goreleaser-recommended packaging path, and avoid recompilation on install — `brew install kupecloud/tap/kupe` works on macOS and Linux.
 
