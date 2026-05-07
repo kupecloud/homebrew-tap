@@ -1,0 +1,40 @@
+name: Validate
+
+# Runs on every push and PR to catch malformed formulas — typically these
+# come from goreleaser bugs or hand-edits (don't hand-edit). The job is
+# fast and uses Homebrew preinstalled on ubuntu-latest.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  brew-audit:
+    name: brew style + brew audit
+    runs-on: ubuntu-latest
+    # Skip when there are no formulas yet (initial seed commit) — brew
+    # globs would otherwise fail with "no matches".
+    if: ${{ hashFiles('Formula/*.rb') != '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Configure Homebrew shell
+        run: |
+          echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+          echo "HOMEBREW_NO_AUTO_UPDATE=1" >> "$GITHUB_ENV"
+          echo "HOMEBREW_NO_INSTALL_FROM_API=1" >> "$GITHUB_ENV"
+
+      - name: brew style
+        run: brew style --formula Formula/*.rb
+
+      - name: brew audit (online — checks URL liveness, license, etc.)
+        run: brew audit --formula --online --strict Formula/*.rb
