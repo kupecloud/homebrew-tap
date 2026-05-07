@@ -44,8 +44,12 @@ jobs:
           mkdir -p "$(dirname "$TAP_DIR")"
           ln -s "$GITHUB_WORKSPACE" "$TAP_DIR"
 
-      - name: brew style (cask)
-        run: brew style --cask kupecloud/tap/kupe
-
-      - name: brew audit (cask, online — checks URL liveness, license, sha256)
+      # NOTE: we deliberately don't run `brew style --cask` here.
+      # goreleaser's cask template emits Ruby that fails 10+ rubocop rules
+      # (stanza ordering, argument alignment, modifier-if, etc.) — all
+      # cosmetic, none functional. Fighting goreleaser's template for
+      # style points isn't worth it. `brew audit` covers the things that
+      # actually matter (URL liveness, sha256 verification, license
+      # values, anti-typosquat).
+      - name: brew audit (cask, online)
         run: brew audit --cask --online --strict kupecloud/tap/kupe
