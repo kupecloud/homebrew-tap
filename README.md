@@ -35,7 +35,8 @@ TAG=v0.1.0   # replace with the release you installed
 cd $(mktemp -d)
 gh release download "$TAG" -R kupecloud/kupe-cli -p '*checksums.txt*'
 cosign verify-blob \
-  --certificate-identity-regexp 'https://github.com/kupecloud/kupe-cli/.+' \
+  --certificate kupe_${TAG#v}_checksums.txt.pem \
+  --certificate-identity-regexp "^https://github.com/kupecloud/kupe-cli/\.github/workflows/.+@refs/tags/${TAG}$" \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --signature kupe_${TAG#v}_checksums.txt.sig \
   kupe_${TAG#v}_checksums.txt
