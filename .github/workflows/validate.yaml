@@ -52,4 +52,11 @@ jobs:
       # actually matter (URL liveness, sha256 verification, license
       # values, anti-typosquat).
       - name: brew audit (cask, online)
+        # `--online` makes GitHub API calls (archived-repo, prerelease-version
+        # checks). Without a token these are anonymous and share the runner
+        # IP's 60 req/hr limit, which is routinely exhausted on ubuntu-latest
+        # and flakes the exact push that publishes a release. The token lifts
+        # this to the 5000 req/hr authenticated limit.
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: brew audit --cask --online --strict kupecloud/tap/kupe
