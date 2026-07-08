@@ -48,6 +48,9 @@ cask "kupe" do
     end
   end
 
-  # No zap stanza required
+  # TODO(kupe-cli): omitting a `zap` stanza is wrong — `brew uninstall --zap`
+  # leaves ~/.config/kupe (config, and on Linux without a keyring a plaintext
+  # credentials file) on disk. The fix is a `zap trash:` stanza in kupe-cli's
+  # .goreleaser.yaml homebrew_casks; this file is generated, so edit it there.
 
 end
