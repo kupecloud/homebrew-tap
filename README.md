@@ -31,12 +31,12 @@ For tap-specific issues (the `brew install` step itself failing, formula syntax 
 Each release's `checksums.txt` is signed with [Cosign](https://github.com/sigstore/cosign) keyless signing via GitHub Actions. To verify:
 
 ```bash
-TAG=v0.1.0   # replace with the release you installed
+TAG=v1.8.5   # replace with the release you installed (certificates attach to releases after v1.8.1)
 cd $(mktemp -d)
 gh release download "$TAG" -R kupecloud/kupe-cli -p '*checksums.txt*'
 cosign verify-blob \
   --certificate kupe_${TAG#v}_checksums.txt.pem \
-  --certificate-identity-regexp "^https://github.com/kupecloud/kupe-cli/\.github/workflows/.+@refs/tags/${TAG}$" \
+  --certificate-identity-regexp '^https://github.com/kupecloud/kupe-cli/\.github/workflows/publish\.yaml@refs/heads/main$' \
   --certificate-oidc-issuer https://token.actions.githubusercontent.com \
   --signature kupe_${TAG#v}_checksums.txt.sig \
   kupe_${TAG#v}_checksums.txt
