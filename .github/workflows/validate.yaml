@@ -44,6 +44,9 @@ jobs:
           rm -rf "$TAP_DIR"
           mkdir -p "$(dirname "$TAP_DIR")"
           ln -s "$GITHUB_WORKSPACE" "$TAP_DIR"
+          # Homebrew refuses to load a cask from a tap it has not been told to
+          # trust ("Refusing to load cask ... from untrusted tap").
+          $BREW trust kupecloud/tap
 
       # NOTE: we deliberately don't run `brew style --cask` here.
       # goreleaser's cask template emits Ruby that fails 10+ rubocop rules
